@@ -1,6 +1,10 @@
-import React from 'react'
-import * as BooksAPI from './BooksAPI'
-import './App.css'
+import React from 'react';
+import { Route } from 'react-router-dom';
+import Book from './Book';
+import Search from './Search';
+import Shelf from './Search';
+import * as BooksAPI from './utils/BooksAPI';
+import './App.css';
 
 class BooksApp extends React.Component {
   state = {
@@ -16,6 +20,12 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
+        <div>
+          <Route path="/search" render={() => (
+            <Search />
+          )} />
+        </div>
+
         {this.state.showSearchPage ? (
           <div className="search-books">
             <div className="search-books-bar">
@@ -203,4 +213,4 @@ class BooksApp extends React.Component {
   }
 }
 
-export default BooksApp
+export default BooksApp;
