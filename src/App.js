@@ -4,6 +4,7 @@ import Book from './Book';
 import Search from './Search';
 import Shelf from './Shelf';
 import * as BooksAPI from './utils/BooksAPI';
+import * as Shelves from './utils/Shelves';
 import './App.css';
 
 class BooksApp extends React.Component {
@@ -33,9 +34,9 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <Shelf title="Currently Reading" shelfName="currentlyReading" books={this.state.allBooks} />
-                <Shelf title="Want to Read" shelfName="wantToRead" books={this.state.allBooks} />
-                <Shelf title="Read" shelfName="read" books={this.state.allBooks} />
+                <Shelf title="Currently Reading" shelfName={Shelves.CURRENTLY_READING} books={this.state.allBooks} />
+                <Shelf title="Want to Read" shelfName={Shelves.WANT_TO_READ} books={this.state.allBooks} />
+                <Shelf title="Read" shelfName={Shelves.READ} books={this.state.allBooks} />
               </div>
             </div>
             <div className="open-search">
