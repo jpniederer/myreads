@@ -9,18 +9,26 @@ import './App.css';
 
 class BooksApp extends React.Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
     allBooks: []
   }
 
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ allBooks: books })
+    });
+  }
+
+  refreshBooks = () => {
+    BooksAPI.getAll().then((books) => {
+      this.setState({ allBooks: books })
+    });
+  }
+
+  updateBook = (bookId, shelf) => {
+    BooksAPI.update(bookId, shelf).then((response) => {
+      BooksAPI.getAll().then((books) => {
+        this.setState({ allBooks: books })
+      });
     })
   }
 
@@ -34,9 +42,9 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <Shelf title="Currently Reading" shelfName={Shelves.CURRENTLY_READING} books={this.state.allBooks} />
-                <Shelf title="Want to Read" shelfName={Shelves.WANT_TO_READ} books={this.state.allBooks} />
-                <Shelf title="Read" shelfName={Shelves.READ} books={this.state.allBooks} />
+                <Shelf title="Currently Reading" shelfName={Shelves.CURRENTLY_READING} books={this.state.allBooks} moveBook={this.updateBook} />
+                <Shelf title="Want to Read" shelfName={Shelves.WANT_TO_READ} books={this.state.allBooks} moveBook={this.updateBook} />
+                <Shelf title="Read" shelfName={Shelves.READ} books={this.state.allBooks} moveBook={this.updateBook} />
               </div>
             </div>
             <div className="open-search">
@@ -45,7 +53,7 @@ class BooksApp extends React.Component {
           </div>
         )} />
         <Route path="/search" render={() => (
-          <Search />
+          <Search moveBook={this.updateBook} />
         )} />
       </div>
     )
