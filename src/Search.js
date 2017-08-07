@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Book from './Book';
+import BookList from './BookList';
 import * as BooksAPI from './utils/BooksAPI';
 import * as Shelves from './utils/Shelves';
 import './App.css';
@@ -73,13 +73,7 @@ class Search extends Component {
               Now showing {displayedBooks.length} books matching your query.
             </span>
           </div>
-          <ol className="books-grid">
-            {displayedBooks.map((book) => (
-              <li key={book.id} className="list-books-content">
-                <Book {...book} moveBook={this.props.moveBook} />
-              </li>
-            ))}
-          </ol>
+          <BookList books={displayedBooks} moveBook={this.props.moveBook} />
         </div>
       </div>
     )

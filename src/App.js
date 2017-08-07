@@ -19,6 +19,9 @@ class BooksApp extends React.Component {
 
   updateBook = (bookId, shelf) => {
     BooksAPI.update(bookId, shelf).then((response) => {
+      // Could avoid this getAll() call.
+      // If the book is already on a shelf just update that book's shelf.
+      // If the book isn't on a shelf this construction would require you to fetch that book and add it to state.
       BooksAPI.getAll().then((books) => {
         this.setState({ allBooks: books })
       });
