@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Book from './Book';
 import * as BooksAPI from './utils/BooksAPI';
+import * as Shelves from './utils/Shelves';
 import './App.css';
 import sortBy from 'sort-by';
 
 class Search extends Component {
   state = {
     query: '',
-    books: []
+    booksFoundInSearch: []
   }
 
   updateQuery = (query) => {
@@ -18,28 +19,42 @@ class Search extends Component {
       BooksAPI.search(query, 20).then((searchResult) => {
         if (searchResult && !searchResult.error) {
           this.setState({
-            books: searchResult.map((book) => book)
+            booksFoundInSearch: searchResult.map((book) => book)
           })
         } else {
           this.setState({
-            books: []
+            booksFoundInSearch: []
           })
         }
       })
     } else {
       this.setState({
-        books: []
+        booksFoundInSearch: []
       })
     }
   }
 
   render() {
-    const { query, books } = this.state;
-    let displayedBooks = books;
+    const { query, booksFoundInSearch } = this.state;
+    const booksOnShelves = this.props.shelvedBooks.reduce((accum, book) => {
+      accum[book.id] = book.shelf;
+      return accum;
+    }, {});  
+    let displayedBooks = booksFoundInSearch.map(book => {
+      if (booksOnShelves[book.id]) {
+        let b = book;
+        b.shelf = booksOnShelves[book.id];
+        return b;
+      } else {
+        let b = book;
+        b.shelf = Shelves.NONE;
+        return b;
+      }
+    });
+    
     displayedBooks.sort(sortBy('title'))
 
     return (
-
       <div className="search-books">
         <div className="search-books-bar">
           <Link className="close-search" to="/">Close</Link>
@@ -56,11 +71,11 @@ class Search extends Component {
           <div className="showing-results">
             <span>
               Now showing {displayedBooks.length} books matching your query.
-              </span>
+            </span>
           </div>
           <ol className="books-grid">
             {displayedBooks.map((book) => (
-              <li key={book.id} className="">
+              <li key={book.id} className="list-books-content">
                 <Book {...book} moveBook={this.props.moveBook} />
               </li>
             ))}

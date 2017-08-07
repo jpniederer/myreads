@@ -13,10 +13,6 @@ class Shelf extends Component {
     books: PropTypes.array.isRequired,
   }
 
-  componentDidMount() {
-
-  }
-
   render() {
     let booksOnShelf = this.props.books.filter((book) => this.props.shelfName === book.shelf);
 
@@ -26,7 +22,7 @@ class Shelf extends Component {
         <div className="bookshelf-books">
           <ol className="books-grid">
             {booksOnShelf.map((book) => (
-              <li key={book.id} className="">
+              <li key={book.id} className="list-books-content">
                 <Book {...book}  moveBook={this.props.moveBook} />
               </li>
             ))}  
